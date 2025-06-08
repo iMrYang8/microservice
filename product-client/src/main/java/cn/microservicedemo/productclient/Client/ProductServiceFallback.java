@@ -2,11 +2,11 @@ package cn.microservicedemo.productclient.Client;
 
 import cn.microservicedemo.productclient.model.Product;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Slf4j
-@Component
 public class ProductServiceFallback implements ProductServiceClient {
     @Override
     public Product findByProductId(Long productId) {
@@ -25,5 +25,20 @@ public class ProductServiceFallback implements ProductServiceClient {
     @Override
     public List<Product> queryAl() {
         return null;
+    }
+
+    @Override
+    public int addProduct(Product product) {
+        return 0;
+    }
+
+    @Override
+    public int updateProduct(Long productId, Product product) {
+        return 0;
+    }
+
+    @Override
+    public int deleteProduct(Long productId) {
+        return 0;
     }
 }

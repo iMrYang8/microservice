@@ -2,6 +2,7 @@ package cn.microservicedemo.productclient.Client;
 
 import cn.microservicedemo.productclient.model.Product;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ import java.util.List;
  * * List<Product> queryAl(): 这个方法用于远程调用商品服务，调用商品服务的queryAl方法，并返回一个List<Product>对象。
  */
 @FeignClient(name="product-service",fallback = ProductServiceFallback.class)
+@Service
 public interface ProductServiceClient {
 
     /**
