@@ -3,6 +3,7 @@ import lombok.AllArgsConstructor;
 
 import lombok.extern.slf4j.Slf4j;
 import microservicedemo.productservice.mapper.ProductMapper;
+import microservicedemo.productservice.mapper.StockMapper;
 import microservicedemo.productservice.po.Product;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +18,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductMapper productMapper;
+    private final StockMapper stockMapper;
     /**
      * 根据商品id查询商品
      */
@@ -69,5 +71,6 @@ public class ProductController {
         log.info("DELETE /product/{} → 删除 {} 条记录", productId, rows);
         return rows;
     }
+
 
 }
