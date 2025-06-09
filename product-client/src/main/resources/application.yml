@@ -24,3 +24,6 @@ eureka:
       prefer-ip-address: true
       lease-renewal-interval-in-seconds: 5         #续约间隔时间
       lease-expiration-duration-in-seconds: 15     #续约到期时间
+#    register-with-eureka: false
+#    fetch-registry: false
+
