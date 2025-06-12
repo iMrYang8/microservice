@@ -14,12 +14,18 @@ spring:
           ##小写serviceId
           lower-case-service-id: true
       routes:
-        - id: product-client
-          uri: lb://product-client
-          filters:
-            - StripPrefix=1
+        - id: product-service
+          uri: lb://product-service
           predicates:
             - Path=/product/**
+        - id: stock-service
+          uri: lb://stock-service
+          predicates:
+            - Path=/stock/**
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/user/**
 eureka:
   instance:
     prefer-ip-address: true

@@ -7,27 +7,41 @@
         <groupId>cn.microservice-demo</groupId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>gateway-service</artifactId>
-    <name>gateway-service</name>
-    <description>gateway-service</description>
+
+    <artifactId>stock-client</artifactId>
+    <name>stock-client</name>
+    <description>stock-client</description>
     <dependencies>
-        <!--eureka 客户端 -->
+
+        <!-- feignclient远程调用 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+        <!--web 模块一定要放在前面 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!--undertow容器 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-undertow</artifactId>
+        </dependency>
+
+        <!--SpringCloud整合的openFeign -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-gateway</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>cn.microservice-demo</groupId>
-            <artifactId>common</artifactId>
-            <version>1.0.0</version>
+            <artifactId>spring-cloud-starter-config</artifactId>
             <exclusions>
                 <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-web</artifactId>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -41,4 +55,3 @@
         </plugins>
     </build>
 </project>
-

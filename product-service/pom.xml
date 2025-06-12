@@ -7,15 +7,32 @@
         <groupId>cn.microservice-demo</groupId>
         <version>1.0.0</version>
     </parent>
-    <artifactId>gateway-service</artifactId>
-    <name>gateway-service</name>
-    <description>gateway-service</description>
+    <artifactId>product-service</artifactId>
+    <name>product-service</name>
+    <description>product-service</description>
     <dependencies>
+        <!-- feignclient远程调用 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-gateway</artifactId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cn.microservice-demo</groupId>
+            <artifactId>stock-client</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+<!--        JWT-->
 
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

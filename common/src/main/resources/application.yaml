@@ -1,0 +1,4 @@
+auth:
+  excludePaths: # 无需登录校验的路径
+    - /user/login
+    - /user/register
