@@ -1,0 +1,23 @@
+server:
+  port: 8011
+spring:
+  application:
+    name: stock-service
+  profiles:
+    active: ${p.env}
+
+eureka:
+  instance:
+    prefer-ip-address: true #如果为false可能出错找不到服务的错误
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    instance:
+      prefer-ip-address: true   #使用ip地址向eureka server进行注册
+      lease-renewal-interval-in-seconds: 5         #续约间隔时间
+      lease-expiration-duration-in-seconds: 15     #续约到期时间
+
+#    register-with-eureka: false   # 不向 Eureka 注册自己
+#    fetch-registry: false         # 不从 Eureka 拉取服务注册表
+
+

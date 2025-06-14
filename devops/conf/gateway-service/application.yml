@@ -1,0 +1,32 @@
+server:
+  port: 9999
+spring:
+  application:
+    name: @artifactId@
+  profiles:
+    active: k8s
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          #开启以服务id去注册中心上获取转发地址
+          enabled: true
+          ##小写serviceId
+          lower-case-service-id: true
+      routes:
+        - id: product-client
+          uri: lb://product-client
+          filters:
+            - StripPrefix=1
+          predicates:
+            - Path=/product/**
+eureka:
+  instance:
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5         #续约间隔时间
+    lease-expiration-duration-in-seconds: 15     #续约到期时间
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+
+
