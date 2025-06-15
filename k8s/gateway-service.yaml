@@ -1,39 +1,83 @@
-kind: List
-apiVersion: v1
-items:
-- apiVersion: v1
-  kind: Service
-  metadata:
-    name: gateway-service
-    namespace: stockmgr
-  spec:
-    type: NodePort
-    selector:
+#kind: List
+#apiVersion: v1
+#items:
+#- apiVersion: v1
+#  kind: Service
+#  metadata:
+#    name: gateway-service
+#    namespace: stockmgr
+#  spec:
+#    type: NodePort
+#    selector:
+#      app: gateway-service
+#    ports:
+#    - name: http
+#      port: 9999
+#      targetPort: 9999
+#      nodePort: 30099
+#- apiVersion: apps/v1
+#  kind: Deployment
+#  metadata:
+#    name: gateway-service
+#    namespace: stockmgr
+#  spec:
+#    replicas: 1
+#    selector:
+#      matchLabels:
+#        app: gateway-service
+#    template:
+#      metadata:
+#        labels:
+#          app: gateway-service
+#      spec:
+#        containers:
+#        - name: gateway-service
+#          imagePullPolicy: IfNotPresent
+#          image: registry.cn-hangzhou.aliyuncs.com/my-stock/gateway-service
+#          ports:
+#          - containerPort: 9999
+#
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # 保持命名规范，用 -deployment 后缀
+  name: gateway-service-deployment
+  # 部署到 stockmgr 命名空间
+  namespace: stockmgr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
       app: gateway-service
-    ports:
-    - name: http
-      port: 9999
-      targetPort: 9999
-      nodePort: 30099
-- apiVersion: apps/v1
-  kind: Deployment
-  metadata:
-    name: gateway-service
-    namespace: stockmgr
-  spec:
-    replicas: 1
-    selector:
-      matchLabels:
+  template:
+    metadata:
+      labels:
         app: gateway-service
-    template:
-      metadata:
-        labels:
-          app: gateway-service
-      spec:
-        containers:
+    spec:
+      containers:
         - name: gateway-service
-          imagePullPolicy: IfNotPresent
-          image: registry.cn-hangzhou.aliyuncs.com/my-stock/gateway-service
+          # 【重要】使用占位符，流水线会自动替换
+          image: your_dockerhub_username/gateway-service:latest
           ports:
-          - containerPort: 9999
-
+            # 根据您的项目代码，gateway 服务的端口是 8080
+            - containerPort: 8080
+          env:
+            # 【关键】为网关指定 Eureka 服务器的地址
+            # 地址是 K8S 的内部 DNS 名称：<服务名>.<命名空间>:端口
+            - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+              value: http://eureka-service.stockmgr:8761/eureka/
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway-service
+  namespace: stockmgr
+spec:
+  type: NodePort
+  selector:
+    # 确保此选择器与上面 Deployment 中的标签完全匹配
+    app: gateway-service
+  ports:
+    - port: 8080
+      targetPort: 8080
+      # 删除手动指定的 nodePort，让 K8S 自动分配

@@ -1,37 +1,78 @@
+#apiVersion: v1
+#kind: List
+#items:
+#  - apiVersion: v1
+#    kind: Service
+#    metadata:
+#      name: eureka-service
+#      namespace: stockmgr
+#    spec:
+#      type: NodePort
+#      ports:
+#        - port: 8888
+#          targetPort: 8888
+#          nodePort: 30001
+#      selector:
+#        app: eureka
+#  - apiVersion: apps/v1
+#    kind: Deployment
+#    metadata:
+#      name: eureka-deployment
+#      namespace: stockmgr
+#    spec:
+#      replicas: 1
+#      selector:
+#        matchLabels:
+#          app: eureka
+#      template:
+#        metadata:
+#          labels:
+#            app: eureka
+#        spec:
+#          containers:
+#            - name: eureka
+#              imagePullPolicy: IfNotPresent
+#              image: registry.cn-hangzhou.aliyuncs.com/my-stock/eureka-service:latest
+#              ports:
+#                - containerPort: 8888
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eureka-service-deployment
+  # 我们将所有资源部署到 stockmgr 命名空间
+  namespace: stockmgr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      # 将标签修改为更具描述性的 eureka-service
+      app: eureka-service
+  template:
+    metadata:
+      labels:
+        # 保持标签和选择器一致
+        app: eureka-service
+    spec:
+      containers:
+        - name: eureka-service
+          # 【重要】将镜像地址改为占位符，CI/CD 流水线会自动替换它
+          image: your_dockerhub_username/eureka-service:latest
+          ports:
+            # 根据您的项目代码，Eureka 默认端口是 8761
+            - containerPort: 8761
+---
 apiVersion: v1
-kind: List
-items:
-  - apiVersion: v1
-    kind: Service
-    metadata:
-      name: eureka-service
-      namespace: stockmgr
-    spec:
-      type: NodePort
-      ports:
-        - port: 8888
-          targetPort: 8888
-          nodePort: 30001
-      selector:
-        app: eureka
-  - apiVersion: apps/v1
-    kind: Deployment
-    metadata:
-      name: eureka-deployment
-      namespace: stockmgr
-    spec:
-      replicas: 1
-      selector:
-        matchLabels:
-          app: eureka
-      template:
-        metadata:
-          labels:
-            app: eureka
-        spec:
-          containers:
-            - name: eureka
-              imagePullPolicy: IfNotPresent
-              image: registry.cn-hangzhou.aliyuncs.com/my-stock/eureka-service:latest
-              ports:
-                - containerPort: 8888
+kind: Service
+metadata:
+  name: eureka-service
+  namespace: stockmgr
+spec:
+  # 使用 NodePort 类型，方便在集群外访问
+  type: NodePort
+  selector:
+    # 确保此选择器与上面 Deployment 中的标签完全匹配
+    app: eureka-service
+  ports:
+    - port: 8761
+      targetPort: 8761
+      # 不再手动指定 nodePort，让 K8S 自动分配以避免冲突
