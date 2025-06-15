@@ -1,6 +1,6 @@
 pipeline {
     // 1. 全局 agent 设置为 none, 允许每个阶段自定义 agent
-    agent none
+    agent any
 
     // 2. 定义流水线中要用到的工具 (名称需与 Jenkins -> Global Tool Configuration 中配置的完全一致)
     tools {
