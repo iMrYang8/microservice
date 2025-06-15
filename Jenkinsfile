@@ -45,7 +45,7 @@ pipeline {
             steps {
                 echo '--> 2. Building all microservices with Maven...'
                 // 使用 mvn 命令，-DskipTests 会跳过单元测试以加快构建速度
-                sh 'mvn clean package -DskipTests'
+                sh 'mvn clean install -DskipTests'
             }
         }
 
