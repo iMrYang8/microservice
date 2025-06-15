@@ -1,6 +1,6 @@
-package cn.microservicedemo.stockClient.Client;
+package cn.microservicedemo.stockclient.client;
 
-import cn.microservicedemo.stockClient.model.Stock;
+import cn.microservicedemo.stockclient.model.Stock;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,6 @@
 package microservicedemo.productservice.controller;
-import cn.microservicedemo.stockClient.Client.StockServiceClient;
-import cn.microservicedemo.stockClient.model.Stock;
+import cn.microservicedemo.stockclient.client.StockServiceClient;
+import cn.microservicedemo.stockclient.model.Stock;
 import lombok.extern.slf4j.Slf4j;
 import microservicedemo.productservice.mapper.ProductMapper;
 import microservicedemo.productservice.po.Product;

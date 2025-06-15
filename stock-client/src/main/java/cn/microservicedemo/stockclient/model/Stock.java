@@ -1,4 +1,4 @@
-package cn.microservicedemo.stockClient.model;
+package cn.microservicedemo.stockclient.model;
 import lombok.Data;
 
 

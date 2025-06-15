@@ -1,6 +1,6 @@
-package cn.microservicedemo.stockClient.Client;
+package cn.microservicedemo.stockclient.client;
 
-import cn.microservicedemo.stockClient.model.Stock;
+import cn.microservicedemo.stockclient.model.Stock;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
