@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   # 保持命名规范
-  name: product-service-deployment
+  name: stock-service-deployment
   namespace: stockmgr
 spec:
   # 保留您设置的 2 个副本
@@ -10,20 +10,20 @@ spec:
   selector:
     matchLabels:
       # 简化并统一标签，方便管理
-      app: product-service
+      app: stock-service
   template:
     metadata:
       labels:
         # 保持标签和选择器一致
-        app: product-service
+        app: stock-service
     spec:
       containers:
-        - name: product-service
+        - name: stock-service
           # 【重要】使用占位符，CI/CD 流水线会自动替换它
-          image: your_dockerhub_username/product-service:latest
+          image: your_dockerhub_username/stock-service:latest
           ports:
             # 根据您的项目代码，product-service 的端口是 8082
-            - containerPort: 8010
+            - containerPort: 8011
           env:
             # 【关键】添加 Eureka 服务器的地址，以便服务注册
             - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
@@ -42,12 +42,12 @@ spec:
           # 保留健康检查，并将端口更新为正确的 8082
           readinessProbe:
             tcpSocket:
-              port: 8010
+              port: 8011
             initialDelaySeconds: 60
             periodSeconds: 10
           livenessProbe:
             tcpSocket:
-              port: 8010
+              port: 8011
             initialDelaySeconds: 60
             periodSeconds: 10
 ---
@@ -55,13 +55,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: product-service
+  name: stock-service
   namespace: stockmgr
 spec:
   type: NodePort
   selector:
     # 确保此选择器与上面 Deployment 中的标签完全匹配
-    app: product-service
+    app: stock-service
   ports:
-    - port: 8010
-      targetPort: 8010
+    - port: 8011
+      targetPort: 8011

@@ -6,7 +6,7 @@ ENV JAR_FILE="stock-service.jar"
 
 COPY ./target/${JAR_FILE} ./
 
-EXPOSE 8010
+EXPOSE 8011
 
 CMD java -jar ${JAVA_ARGS} ${JAVA_OPTS} /${JAR_FILE}
 
