@@ -7,16 +7,17 @@
     <groupId>cn.microservice-demo</groupId>
     <artifactId>microservice-demo</artifactId>
     <version>1.0.0</version>
-    <!--新增包含的子项目-->
+
     <modules>
+        <module>common</module>
+        <module>stock-client</module>
         <module>eureka-service</module>
         <module>product-service</module>
-        <module>stock-client</module>
         <module>gateway-service</module>
         <module>stock-service</module>
         <module>user-service</module>
-        <module>common</module>
     </modules>
+
     <name>microservice-demo</name>
     <packaging>pom</packaging>
     <description>简单的微服务案例</description>
@@ -26,17 +27,15 @@
         <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
         <springboot.version>2.0.9.RELEASE</springboot.version>
         <springcloud.version>Finchley.SR2</springcloud.version>
-
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <mybatis.version>2.1.4</mybatis.version>
         <hutool.version>4.5.13</hutool.version>
         <p.env>"dev"</p.env>
     </properties>
-    <!-- 管理依赖 声明依赖 -->
+
     <dependencyManagement>
         <dependencies>
-            <!-- spring Boot 依赖 -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -44,7 +43,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!-- spring Cloud 依赖 -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -52,9 +50,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
-            <!-- 统一依赖管理 -->
-
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-config-server</artifactId>
@@ -62,9 +57,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
-
-            <!--加入hystrix的依赖 -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
@@ -72,9 +64,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
-
-            <!-- spring cloud config 客户端 -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-config</artifactId>
@@ -82,14 +71,11 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
-            <!--spring boot web 模块 -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
                 <version>${springboot.version}</version>
                 <exclusions>
-                    <!--排除tomcat依赖 ,使用underom -->
                     <exclusion>
                         <artifactId>spring-boot-starter-tomcat</artifactId>
                         <groupId>org.springframework.boot</groupId>
@@ -98,19 +84,16 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
     <dependencies>
-        <!--eureka 客户端 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
-        <!-- feignclient远程调用 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
-
-        <!--Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -150,7 +133,6 @@
                     <target>${maven.compiler.target}</target>
                     <source>${maven.compiler.source}</source>
                     <encoding>UTF-8</encoding>
-                    <skip>true</skip>
                 </configuration>
             </plugin>
             <plugin>
@@ -162,7 +144,6 @@
     </build>
 
     <repositories>
-        <!--阿里云主仓库，代理了maven central和jcenter仓库 -->
         <repository>
             <id>aliyun</id>
             <name>aliyun</name>
@@ -174,7 +155,6 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        <!--阿里云代理Spring 官方仓库 -->
         <repository>
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
