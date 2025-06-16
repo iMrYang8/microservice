@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>microservice-demo</artifactId>
-        <groupId>cn.microservice-demo</groupId>
+        <groupId>cn.microservicedemo</groupId>
         <version>1.0.0</version>
     </parent>
     <artifactId>gateway-service</artifactId>
@@ -21,7 +21,7 @@
             <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
         <dependency>
-            <groupId>cn.microservice-demo</groupId>
+            <groupId>cn.microservicedemo</groupId>
             <artifactId>common</artifactId>
             <version>1.0.0</version>
             <exclusions>

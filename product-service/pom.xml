@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>microservice-demo</artifactId>
-        <groupId>cn.microservice-demo</groupId>
+        <groupId>cn.microservicedemo</groupId>
         <version>1.0.0</version>
     </parent>
     <artifactId>product-service</artifactId>
@@ -17,7 +17,7 @@
             <artifactId>spring-cloud-starter-openfeign</artifactId>
         </dependency>
         <dependency>
-            <groupId>cn.microservice-demo</groupId>
+            <groupId>cn.microservicedemo</groupId>
             <artifactId>stock-client</artifactId>
             <version>1.0.0</version>
         </dependency>
