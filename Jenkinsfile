@@ -43,9 +43,17 @@ pipeline {
         stage('Build with Maven') {
             agent any
             steps {
-                echo '--> 2. Building all microservices with Maven...'
+                echo '--> 2.1 Cleaning Maven project...'
+                // 第一步：执行 mvn clean
+                sh 'mvn clean'
+
+                echo '--> 2.2 Compiling Maven project '
+                // 第二步：执行 mvn package -DskipTests
+                sh 'mvn compile'
+
+                echo '--> 2.3 package Maven project...'
                 // 使用 mvn 命令，-DskipTests 会跳过单元测试以加快构建速度
-                sh 'mvn clean compile package -DskipTests'
+                sh 'mvn package -DskipTests'
             }
         }
 
