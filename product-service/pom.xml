@@ -19,7 +19,7 @@
         <dependency>
             <groupId>cn.microservicedemo</groupId>
             <artifactId>stock-client</artifactId>
-            <version>1.0.0</version>
+            <version>${project.version}</version>
         </dependency>
 <!--        JWT-->
 
