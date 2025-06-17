@@ -36,6 +36,25 @@ pipeline {
                 git credentialsId: 'Github-Private-Key', url: 'git@github.com:iMrYang8/microservice.git', branch: 'main'
             }
         }
+// =========================================================
+        // 【临时阶段】：深度清理缓存
+        // =========================================================
+        stage('Deep Clean (Temporary)') {
+            agent any
+            steps {
+                echo '--> Forcing a deep clean to remove caches...'
+
+                // 清理 Docker 系统中所有未使用的数据，包括构建缓存
+                // -a 表示 all, -f 表示 force (无需确认)
+                echo '--> Cleaning up Docker build cache...'
+                sh 'docker system prune -a -f'
+
+                // 强制 Maven 更新依赖，忽略本地仓库中的快照版本
+                // 这一步会重新下载依赖，所以会慢一些
+                echo '--> Forcing Maven to update dependencies...'
+                sh 'mvn clean install -U -DskipTests'
+            }
+        }
 
         // =========================================================
         // 阶段二：编译和打包 (Build)
