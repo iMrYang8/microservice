@@ -36,7 +36,25 @@ pipeline {
                 git credentialsId: 'Github-Private-Key', url: 'git@github.com:iMrYang8/microservice.git', branch: 'main'
             }
         }
+        stage('Debug File Contents (Temporary)') {
+                    agent any
+                    steps {
+                        script {
+                            echo "=============== DEBUGGING START ==============="
 
+                            echo "--> 1. Displaying current directory and files:"
+                            sh 'ls -la'
+
+                            echo "\n--> 2. Displaying content of root pom.xml:"
+                            sh 'cat pom.xml'
+
+                            echo "\n--> 3. Displaying content of Jenkinsfile:"
+                            sh 'cat Jenkinsfile'
+
+                            echo "=============== DEBUGGING END ==============="
+                        }
+                    }
+                }
         // =========================================================
         // 阶段二：编译和打包 (Build)
         // =========================================================
