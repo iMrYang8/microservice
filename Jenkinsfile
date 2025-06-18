@@ -118,7 +118,8 @@ pipeline {
                     echo '--> 4. Deploying all services to Kubernetes...'
                     // 使用我们之前配置好的 K8S 连接凭证
                     withKubeConfig([credentialsId: env.K8S_CREDENTIALS_ID]) {
-
+                        echo "--- Checking kubectl and server versions ---"
+                        sh 'kubectl version'
                         // 循环处理每一个微服务
                         def services = env.SERVICE_LIST.split(' ')
                         for (s in services) {
