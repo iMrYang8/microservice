@@ -139,32 +139,66 @@ pipeline {
 //                 }
 //             }
 //         }
-           stage('Deploy to Kubernetes') {
-                       steps {
-                           script {
-                               echo '--> 4. Deploying all services to Kubernetes...'
-                               // 使用我们之前配置好的 K8S 连接凭证
-                               withKubeConfig([credentialsId: env.K8S_CREDENTIALS_ID]) {
+//            stage('Deploy to Kubernetes') {
+//                        steps {
+//                            script {
+//                                echo '--> 4. Deploying all services to Kubernetes...'
+//                                // 使用我们之前配置好的 K8S 连接凭证
+//                                withKubeConfig([credentialsId: env.K8S_CREDENTIALS_ID]) {
+//
+//                                    echo "=============== K8S DEBUGGING START ==============="
+//
+//                                    echo "\n--> 1. 查看 kubectl 当前的完整配置:"
+//                                    // 这会打印出 server 地址、用户、上下文等信息，让我们确认配置是否正确
+//                                    sh 'kubectl config view'
+//
+//                                    echo "\n--> 2. 尝试一个最基础的读取权限测试:"
+//                                    // 我们尝试获取 kube-system 命名空间下的 Pods，这通常需要最基本的集群读取权限
+//                                    sh 'kubectl get pods -n kube-system'
+//
+//                                    echo "\n--> 3. 使用最高级别的详细日志来执行 apply 命令:"
+//                                    // -v=8 会打印出与 K8s Server 之间所有的原始 HTTP 请求和响应，提供最详细的线索
+//                                    sh 'kubectl apply -f k8s/eureka-service.yaml -n stockmgr -v=8'
+//
+//                                    echo "=============== K8S DEBUGGING END ==============="
+//                                }
+//                            }
+//                        }
+//                    }
 
-                                   echo "=============== K8S DEBUGGING START ==============="
 
-                                   echo "\n--> 1. 查看 kubectl 当前的完整配置:"
-                                   // 这会打印出 server 地址、用户、上下文等信息，让我们确认配置是否正确
-                                   sh 'kubectl config view'
+                  stage('Deploy to Kubernetes') {
+                      steps {
+                          script {
+                              echo '--> 4. Deploying all services to Kubernetes...'
+                              // 使用 'Secret file' 类型的凭证
+                              withCredentials([file(credentialsId: env.K8S_CREDENTIALS_ID, variable: 'KUBECONFIG_FILE_PATH')]) {
 
-                                   echo "\n--> 2. 尝试一个最基础的读取权限测试:"
-                                   // 我们尝试获取 kube-system 命名空间下的 Pods，这通常需要最基本的集群读取权限
-                                   sh 'kubectl get pods -n kube-system'
+                                  // 在 withEnv 块中设置 KUBECONFIG 环境变量，
+                                  // 这样后续所有的 kubectl 命令都会自动使用这个配置文件
+                                  withEnv(["KUBECONFIG=${KUBECONFIG_FILE_PATH}"]) {
 
-                                   echo "\n--> 3. 使用最高级别的详细日志来执行 apply 命令:"
-                                   // -v=8 会打印出与 K8s Server 之间所有的原始 HTTP 请求和响应，提供最详细的线索
-                                   sh 'kubectl apply -f k8s/eureka-service.yaml -n stockmgr -v=8'
+                                      echo "--- Checking kubectl and server versions ---"
+                                      sh 'kubectl version'
 
-                                   echo "=============== K8S DEBUGGING END ==============="
-                               }
-                           }
-                       }
-                   }
+                                      // 循环处理每一个微服务
+                                      def services = env.SERVICE_LIST.split(' ')
+                                      for (s in services) {
+                                          def serviceName = s.trim()
+                                          def imageName = "${env.DOCKER_REGISTRY}/${serviceName}:${env.BUILD_NUMBER}"
+                                          def yamlFile = "k8s/${serviceName}.yaml"
+
+                                          echo "--- Updating image in ${yamlFile} to ${imageName} ---"
+                                          sh "sed -i 's|image:.*|image: ${imageName}|g' ${yamlFile}"
+
+                                          echo "--- Applying ${yamlFile} to Kubernetes namespace ${env.K8S_NAMESPACE} ---"
+                                          sh "kubectl apply -f ${yamlFile} -n ${env.K8S_NAMESPACE}"
+                                      }
+                                  }
+                              }
+                          }
+                      }
+                  }
     }
 
     // post 部分定义了流水线运行结束后无论成功失败都需要执行的操作
